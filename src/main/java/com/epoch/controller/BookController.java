@@ -14,6 +14,7 @@ public class BookController {
 
     @Autowired
     private BookService bookService;
+
     //    查询所有
     @GetMapping()
     public Result findAll() {
@@ -59,10 +60,10 @@ public class BookController {
         if (id == null || id <= 0) {
             // 如果ID无效，抛出BusinessException
 //            throw new BusinessException(Code.INVALID_ID, "无效的ID");
-            return new Result(Code.ADD_ERROR,null,"无效的ID,请重试！");
+            return new Result(Code.ADD_ERROR, null, "无效的ID,请重试！");
         }
         BookInfo bookInfo = bookService.findById(id); //
-        System.out.println("接收的id="+id);
+        System.out.println("接收的id=" + id);
         if (bookInfo == null) {
             return new Result(Code.NOT_FOUND, null, "未找到该ID对应的书籍");
         }
@@ -71,6 +72,26 @@ public class BookController {
             return new Result(Code.DELETE_ERROR, null, "删除失败，数据库操作异常");
         }
 
-        return new Result(Code.SAVE_SUCCESS, null, bookInfo.getTitle()+"删除成功");
+        return new Result(Code.SAVE_SUCCESS, null, bookInfo.getTitle() + "删除成功");
+    }
+
+    //    修改对象
+    @PutMapping
+    public Result upDateBookInfo(@RequestBody BookInfo bookInfo) {
+        if (bookInfo == null) {
+            // 返回一个表示错误的 Result 对象，比如 HTTP 400 错误
+            return new Result(Code.INVALID_PARAM, "修改失败");
+        }
+        // 调用 service 层更新书籍信息
+        Boolean books1 = bookService.updateBookInfo(bookInfo);
+        System.out.println("修改的id=" + bookInfo.getId());
+        System.out.println("books1=" + books1);
+        if (books1) {
+            // 更新成功，返回成功的响应
+            return new Result(Code.SAVE_SUCCESS, null, "修改成功");
+        } else {
+            // 更新失败，返回失败的响应
+            return new Result(Code.UPDATE_FAILED, null, "修改失败");
+        }
     }
 }

@@ -4,23 +4,30 @@
     <resultMap id="bookResultMap" type="com.epoch.domain.BookInfo">
         <result property="id" column="id"/>
         <result property="title" column="bookTitle"/>
+        <result property="sex" column="sex"/>
         <result property="description" column="description"/>
         <result property="author" column="author"/>
         <result property="publishingHouse" column="publishingHouse"/>
+        <result property="publicationDate" column="publicationDate"/>
         <result property="bookId" column="book_id"/>
     </resultMap>
+    <!--  添加图书  -->
     <insert id="addBookInfo">
-        INSERT INTO tb_book (bookTitle, description, author, publishingHouse,book_id)
-        VALUES (#{title}, #{description}, #{author}, #{publishingHouse},#{bookId})
+        INSERT INTO tb_book (bookTitle, description, author, publishingHouse, book_id, sex,publicationDate)
+        VALUES (#{title}, #{description}, #{author}, #{publishingHouse}, #{bookId}, #{sex},#{publicationDate})
     </insert>
+    <!--  更新图书  -->
     <update id="updateBookInfo">
         UPDATE tb_book
         SET bookTitle       = #{title},
             description     = #{description},
             author          = #{author},
-            publishingHouse = #{publishingHouse}
+            publishingHouse = #{publishingHouse},
+            sex= #{sex},
+            publicationDate= #{publicationDate}
         WHERE id = #{id}
     </update>
+    <!-- 删除图书 -->
     <delete id="deleteBookInfo" parameterType="integer">
         DELETE
         FROM tb_book
@@ -28,9 +35,20 @@
     </delete>
     <!--  查询所有图书  -->
     <select id="findAll" resultMap="bookResultMap">
-        select id, bookTitle, description, author, publishingHouse,book_id from tb_book
+        select id,
+               bookTitle,
+               description,
+               author,
+               publishingHouse,
+               book_id,
+               sex,
+               publicationDate
+        from tb_book
     </select>
+    <!--  根据ID查询图书  -->
     <select id="findById" resultMap="bookResultMap">
-        select id, bookTitle, description, author, publishingHouse,book_id from tb_book where id=#{id}
+        select id, bookTitle, description, author, publishingHouse, book_id, sex,publicationDate
+        from tb_book
+        where id = #{id}
     </select>
 </mapper>
